@@ -28,7 +28,7 @@ GenServer.call(__MODULE__,{:actor,actor})
 end
 
 def by_year(year) do
-GenServer.call(__MODULE__,{newer_or_older,year})
+GenServer.call(__MODULE__,{:newer_or_older,year})
 end
 
 
@@ -47,19 +47,19 @@ def handle_cast({:remove,id},listofmovies) do
 {:noreply,[id | listofmovies]}
 end
 
-def handle_call({by_id,id},_from,listofmovies) do
+def handle_call({:by_id,id},_from,listofmovies) do
 {:reply,Enum.find(listofmovies, fn movie-> id == movie.id end),listofmovies}
 end
 
-def handle_call({:genre,genre},listofmovie) do
+def handle_call({:genre,genre},_from,listofmovie) do
 {:reply,Enum.filter(listofmovies,fn movie->genre == movie.genre end),listofmovies}
 end
 
-def handle_call({:actor,actor},listofmovies) do
+def handle_call({:actor,actor},_from,listofmovies) do
 {:reply,Enum.filter(listofmovies, fn movie->actor==movie.actor end),listofmovies}
 end
 
-def handle_call({:newer_or_older,year},listofmovies) do
+def handle_call({:newer_or_older,year},_from,listofmovies) do
 {:reply,Enum.filter(listofmovies, fn movie->year<movie.year or year>movie.year end),listofmovies}
 end
 
